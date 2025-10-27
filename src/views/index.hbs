@@ -1,0 +1,74 @@
+<div class="container page-container">
+    
+    <div class="main-column">
+        {{#if pratoDoDia}}
+        <section class="card prato-do-dia">
+            <h2>Prato do Dia: {{pratoDoDia.nome}}</h2>
+            <img src="{{pratoDoDia.foto_url_url}}" alt="Foto de {{pratoDoDia.nome}}" class="prato-imagem">
+            <p class="prato-descricao">{{pratoDoDia.descricao}}</p>
+            <div class="acoes-container">
+                <button id="like-btn" class="btn btn-like" data-id="{{pratoDoDia.id_prato}}">
+                    👍 Curtir (<span id="like-count">{{pratoDoDia.curtidas}}</span>)
+                </button>
+                <button id="dislike-btn" class="btn btn-dislike" data-id="{{pratoDoDia.id_prato}}">
+                    👎 Não Curtir (<span id="dislike-count">{{pratoDoDia.naocurtidas}}</span>)
+                </button>
+            </div>
+            {{#if pratoDoDia.receita}}
+            <details class="receita-details">
+                <summary>Ver Receita do Prato</summary>
+                <div class="receita-content"><p>{{{pratoDoDia.receita}}}</p></div>
+            </details>
+            {{/if}}
+        </section>
+
+        <section class="card comentarios-section">
+            <h3>Deixe seu Comentário</h3>
+            <form id="comment-form">
+                <input type="hidden" name="pratoId" value="{{pratoDoDia.id_prato}}">
+                <textarea id="comment-text" name="comentario" rows="3" placeholder="O que você achou?" required></textarea>
+                <button type="submit" class="btn btn-primary">Enviar Comentário</button>
+            </form>
+            <div class="comentarios-lista" id="comment-list">
+                <h4>Comentários Aprovados:</h4>
+                {{#each pratoDoDia.comentarios}}
+                <div class="comentario-item">
+                    <strong>{{this.autor_nome}}:</strong>
+                    <p>{{this.texto}}</p>
+                </div>
+                {{/each}}
+                {{#unless pratoDoDia.comentarios}}<p>Seja o primeiro a comentar!</p>{{/unless}}
+            </div>
+        </section>
+        {{else}}
+        <section class="card">
+            <h2>Cardápio de Hoje</h2>
+            <p>O cardápio para hoje ainda não foi cadastrado. Por favor, verifique novamente mais tarde.</p>
+        </section>
+        {{/if}}
+    </div>
+
+    <div class="sidebar-column">
+        <section id="cardapio" class="card cardapio-semana">
+            <h3>Próximos Dias</h3>
+            <table>
+                <thead><tr><th>Dia</th><th>Prato Principal</th></tr></thead>
+                <tbody>
+                    {{#each cardapioSemana}}
+                    <tr>
+                        <td>{{this.dia_semana}} ({{this.data_formatada}})</td>
+                        <td>{{this.prato_principal_nome}}</td>
+                    </tr>
+                    {{/each}}
+                    {{#unless cardapioSemana}}
+                    <tr><td colspan="2">Nenhum cardápio cadastrado.</td></tr>
+                    {{/unless}}
+                </tbody>
+            </table>
+        </section>
+        <section id="grafico" class="card grafico-section">
+            <h3>Pratos Mais Populares</h3>
+            <div class="chart-container"><canvas id="likesChart"></canvas></div>
+        </section>
+    </div>
+</div>
