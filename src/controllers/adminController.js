@@ -33,13 +33,22 @@ const getLogout = (req, res) => {
     });
 };
 
-const getDashboard = (req, res) => {
+const getDashboard = async (req, res) => { 
+    try {
+        
+        const comentariosPendentes = await Cardapio.getComentariosPendentes();
+        const numPendentes = comentariosPendentes.length;
 
-    res.render('admin/dashboard', { 
-        layout: 'layouts/main', 
-        title: 'Dashboard',
-        isAdminPage: true 
-    });
+        res.render('admin/dashboard', {
+            layout: 'layouts/main',
+            title: 'Dashboard',
+            isAdminPage: true,
+            numPendentes: numPendentes 
+        });
+    } catch (error) {
+        console.error("Erro ao carregar o dashboard:", error);
+        res.status(500).send("Erro ao carregar a página.");
+    }
 };
 
 const getCardapioPage = async (req, res) => {
@@ -78,9 +87,42 @@ const postCardapio = async (req, res) => {
     }
 };
 
-const getComentariosPage = (req, res) => { res.send('Página para Moderar Comentários'); };
-const postAprovarComentario = (req, res) => { res.send('Comentário Aprovado!'); };
-const postExcluirComentario = (req, res) => { res.send('Comentário Excluído!'); };
+const getComentariosPage = async (req, res) => {
+    try {
+        const comentariosPendentes = await Cardapio.getComentariosPendentes();
+        res.render('admin/gerenciar-comentarios', {
+            layout: 'layouts/main',
+            title: 'Moderar Comentários',
+            isAdminPage: true,
+            comentarios: comentariosPendentes
+        });
+    } catch (error) {
+        console.error("Erro ao carregar página de moderação:", error);
+        res.status(500).send("Erro ao carregar a página.");
+    }
+};
+
+const postAprovarComentario = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await Cardapio.aprovarComentario(id);
+        res.redirect('/admin/comentarios');
+    } catch (error) {
+        console.error("Erro ao aprovar comentário:", error);
+        res.status(500).send("Erro ao processar a solicitação.");
+    }
+};
+
+const postExcluirComentario = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await Cardapio.excluirComentario(id);
+        res.redirect('/admin/comentarios');
+    } catch (error) {
+        console.error("Erro ao excluir comentário:", error);
+        res.status(500).send("Erro ao processar a solicitação.");
+    }
+};
 
 
 module.exports = {
