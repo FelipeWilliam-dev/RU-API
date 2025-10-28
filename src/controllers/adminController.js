@@ -1,3 +1,5 @@
+const Cardapio = require('../models/cardapio')
+
 const getLoginPage = (req, res) => {
     res.render('admin/login', { layout: 'layouts/main', title: 'Login Admin' });
 };

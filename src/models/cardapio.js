@@ -11,6 +11,39 @@ const mapInteractionCounts = (rows) => {
 
 class Cardapio {
 
+    static async getAllPratos() {
+        const sql = 'SELECT id_prato, nome FROM pratos ORDER BY nome ASC';
+        const [rows] = await db.execute(sql);
+        return rows;
+    }
+
+    static async createOrUpdateCardapio(data, dia_semana, id_prato_principal) {
+        
+        const checkSql = 'SELECT id_cardapio FROM cardapio_semana WHERE data = ?';
+        const [existing] = await db.execute(checkSql, [data]);
+
+        if (existing.length > 0) {
+            
+            const id_cardapio = existing[0].id_cardapio;
+            const updateSql = `
+                UPDATE cardapio_semana 
+                SET dia_semana = ?, id_prato_principal = ? 
+                WHERE id_cardapio = ?
+            `;
+
+            await db.execute(updateSql, [dia_semana, id_prato_principal || null, id_cardapio]);
+            return { id: id_cardapio, updated: true };
+        } else {
+            
+            const insertSql = `
+                INSERT INTO cardapio_semana (data, dia_semana, id_prato_principal) 
+                VALUES (?, ?, ?)
+            `;
+            const [result] = await db.execute(insertSql, [data, dia_semana, id_prato_principal || null]);
+            return { id: result.insertId, created: true };
+        }
+    }
+
     static async getCardapioHoje() {
         const sql = `
             SELECT 
