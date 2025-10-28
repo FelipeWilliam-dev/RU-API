@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="../../../public/css/style.css">
+<div class="container page-container" style="max-width: 500px;">
+    <div class="main-column">
+        <section class="card">
+            <h2>Acesso Administrativo</h2>
+            <p>Por favor, insira a senha para gerenciar o sistema.</p>
+            
+            <form action="/admin/login" method="POST" class="login-form">
+                <div class="form-group">
+                    <label for="password">Senha de Administrador</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                {{#if error}}
+                    <p class="error-message">{{error}}</p>
+                {{/if}}
+
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+        </section>
+    </div>
+</div>
+
