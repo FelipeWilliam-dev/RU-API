@@ -112,6 +112,32 @@ class Cardapio {
         const [rows] = await db.execute(sql);
         return rows;
     }
+
+    static async getComentariosPendentes() {
+        const sql = `
+            SELECT 
+                c.id_comentario, 
+                c.texto, 
+                c.autor_nome,
+                p.nome AS nome_prato
+            FROM comentarios c
+            JOIN pratos p ON c.id_prato = p.id_prato
+            WHERE c.aprovado = 0 
+            ORDER BY c.data_hora ASC
+        `;
+        const [rows] = await db.execute(sql);
+        return rows;
+    }
+
+    static async aprovarComentario(id_comentario) {
+        const sql = 'UPDATE comentarios SET aprovado = 1 WHERE id_comentario = ?';
+        await db.execute(sql, [id_comentario]);
+    }
+
+    static async excluirComentario(id_comentario) {
+        const sql = 'DELETE FROM comentarios WHERE id_comentario = ?';
+        await db.execute(sql, [id_comentario]);
+    }
 }
 
 module.exports = Cardapio;
