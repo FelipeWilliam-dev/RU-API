@@ -37,8 +37,41 @@ const getDashboard = (req, res) => {
     res.render('admin/dashboard', { layout: 'layouts/main', title: 'Dashboard' });
 };
 
-const getCardapioPage = (req, res) => { res.send('Página para Gerenciar Cardápio'); };
-const postCardapio = (req, res) => { res.send('Cardápio salvo!'); };
+const getCardapioPage = async (req, res) => {
+    try {
+        const todosOsPratos = await Cardapio.getAllPratos();
+        const cardapioSemana = await Cardapio.getCardapioSemana();
+
+        res.render('admin/gerenciar-cardapio', {
+            layout: 'layouts/main',
+            title: 'Gerenciar Cardápio',
+            todosOsPratos,
+            cardapioSemana
+        });
+    } catch (error) {
+        console.error("Erro ao carregar página de gerenciamento de cardápio:", error);
+        res.status(500).send("Erro ao carregar a página.");
+    }
+};
+
+const postCardapio = async (req, res) => {
+    try {
+        const { data, dia_semana, id_prato_principal } = req.body;
+        
+        if (!data || !dia_semana) {
+            return res.status(400).send("Data e Dia da Semana são obrigatórios.");
+        }
+
+        await Cardapio.createOrUpdateCardapio(data, dia_semana, id_prato_principal);
+
+        res.redirect('/admin/cardapio');
+
+    } catch (error) {
+        console.error("Erro ao salvar o cardápio:", error);
+        res.status(500).send("Erro ao salvar o cardápio.");
+    }
+};
+
 const getComentariosPage = (req, res) => { res.send('Página para Moderar Comentários'); };
 const postAprovarComentario = (req, res) => { res.send('Comentário Aprovado!'); };
 const postExcluirComentario = (req, res) => { res.send('Comentário Excluído!'); };
