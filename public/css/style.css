@@ -58,3 +58,43 @@
     background-color: #004a91;
     color: #fff;
 }
+
+.admin-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.admin-form button {
+    grid-column: 1 / -1;
+    justify-self: start;
+}
+
+.form-divider {
+    margin: 30px 0;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+.cardapio-lista-admin li {
+    list-style: none;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}

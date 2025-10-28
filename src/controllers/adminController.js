@@ -18,7 +18,8 @@ const postLogin = (req, res) => {
         res.render('admin/login', {
             layout: 'layouts/main',
             title: 'Login Admin',
-            error: 'Senha incorreta. Tente novamente.'
+            error: 'Senha incorreta. Tente novamente.',
+            isAdminPage: true
         });
     }
 };
@@ -34,7 +35,11 @@ const getLogout = (req, res) => {
 
 const getDashboard = (req, res) => {
 
-    res.render('admin/dashboard', { layout: 'layouts/main', title: 'Dashboard' });
+    res.render('admin/dashboard', { 
+        layout: 'layouts/main', 
+        title: 'Dashboard',
+        isAdminPage: true 
+    });
 };
 
 const getCardapioPage = async (req, res) => {
@@ -46,7 +51,8 @@ const getCardapioPage = async (req, res) => {
             layout: 'layouts/main',
             title: 'Gerenciar Cardápio',
             todosOsPratos,
-            cardapioSemana
+            cardapioSemana,
+            isAdminPage: true
         });
     } catch (error) {
         console.error("Erro ao carregar página de gerenciamento de cardápio:", error);
