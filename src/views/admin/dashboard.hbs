@@ -3,11 +3,24 @@
         <section class="card">
             <div class="admin-header">
                 <h2>Painel do Administrador</h2>
-                </div>
+            </div>
 
             <div class="dashboard-content">
                 <h3>Bem-vindo!</h3>
                 <p>Use o menu no topo da página para navegar pelas seções e gerenciar o conteúdo do site do RU.</p>
+
+                <div class="dashboard-stats">
+                    <h4>Resumo:</h4>
+                    <p>
+                        Você tem <strong>{{numPendentes}}</strong>
+                        {{#if (eq numPendentes 1)}}
+                        comentário pendente
+                        {{else}}
+                        comentários pendentes
+                        {{/if}}
+                        de moderação.
+                    </p>
+                </div>
             </div>
         </section>
     </div>

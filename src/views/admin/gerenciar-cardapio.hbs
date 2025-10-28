@@ -1,15 +1,37 @@
+<link rel="stylesheet" href="../../../public/css/style.css">
 <div class="container page-container">
     <div class="main-column">
         <section class="card">
             <div class="admin-header">
-                <h2>Gerenciar Cardápio</h2>
-                </div>
+                <h2>Moderar Comentários</h2>
+            </div>
 
             <div class="admin-content">
-                <h3>Cadastrar/Editar Cardápio do Dia</h3>
-                <form action="/admin/cardapio" method="POST" class="admin-form">
-                    </form>
-                </div>
+                <h3>Comentários Pendentes de Aprovação</h3>
+
+                {{#if comentarios.length}}
+                    <div class="comments-list-admin">
+                        {{#each comentarios}}
+                        <div class="comment-item-admin">
+                            <div class="comment-details">
+                                <p>"{{this.texto}}"</p>
+                                <small><strong>Autor:</strong> {{this.autor_nome}} | <strong>Prato:</strong> {{this.nome_prato}}</small>
+                            </div>
+                            <div class="comment-actions">
+                                <form action="/admin/comentarios/aprovar/{{this.id_comentario}}" method="POST">
+                                    <button type="submit" class="btn btn-like">Aprovar</button>
+                                </form>
+                                <form action="/admin/comentarios/excluir/{{this.id_comentario}}" method="POST">
+                                    <button type="submit" class="btn btn-dislike">Excluir</button>
+                                </form>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <p>Não há comentários pendentes de moderação no momento.</p>
+                {{/if}}
+            </div>
         </section>
     </div>
 </div>
