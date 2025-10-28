@@ -1,4 +1,5 @@
 const Cardapio = require('../models/cardapio');
+const Comentario = require('../models/comentario');
 
 const getHomePage = async (req, res) => {
     try {
@@ -16,10 +17,8 @@ const getHomePage = async (req, res) => {
                 foto_url: cardapioHoje.prato_principal_foto
             };
 
-            const comentarios = await Cardapio.getComentarios(pratoDoDia.id_prato);
-            const counts = await Cardapio.getInteractionCounts(pratoDoDia.id_prato);
-
-            pratoDoDia.comentarios = comentarios;
+            pratoDoDia.comentarios = await Comentario.getComentarios(pratoDoDia.id_prato);
+            const counts = await Comentario.getInteractionCounts(pratoDoDia.id_prato);
             pratoDoDia.curtidas = counts.like;
             pratoDoDia.naocurtidas = counts.dislike;
         }

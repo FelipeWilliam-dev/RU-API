@@ -1,4 +1,6 @@
-const Cardapio = require('../models/cardapio')
+const Cardapio = require('../models/cardapio');
+const Comentario = require('../models/comentario');
+const Prato = require('../models/Prato');
 
 const getLoginPage = (req, res) => {
     res.render('admin/login', { layout: 'layouts/main', title: 'Login Admin' });
@@ -36,7 +38,7 @@ const getLogout = (req, res) => {
 const getDashboard = async (req, res) => { 
     try {
         
-        const comentariosPendentes = await Cardapio.getComentariosPendentes();
+        const comentariosPendentes = await Comentario.getComentariosPendentes();
         const numPendentes = comentariosPendentes.length;
 
         res.render('admin/dashboard', {
@@ -53,7 +55,7 @@ const getDashboard = async (req, res) => {
 
 const getCardapioPage = async (req, res) => {
     try {
-        const todosOsPratos = await Cardapio.getAllPratos();
+        const todosOsPratos = await Prato.getAllPratos();
         const cardapioSemana = await Cardapio.getCardapioSemana();
 
         res.render('admin/gerenciar-cardapio', {
@@ -89,7 +91,7 @@ const postCardapio = async (req, res) => {
 
 const getComentariosPage = async (req, res) => {
     try {
-        const comentariosPendentes = await Cardapio.getComentariosPendentes();
+        const comentariosPendentes = await Comentario.getComentariosPendentes();
         res.render('admin/gerenciar-comentarios', {
             layout: 'layouts/main',
             title: 'Moderar Comentários',
@@ -105,7 +107,7 @@ const getComentariosPage = async (req, res) => {
 const postAprovarComentario = async (req, res) => {
     try {
         const { id } = req.params;
-        await Cardapio.aprovarComentario(id);
+        await Comentario.aprovarComentario(id);
         res.redirect('/admin/comentarios');
     } catch (error) {
         console.error("Erro ao aprovar comentário:", error);
@@ -116,7 +118,7 @@ const postAprovarComentario = async (req, res) => {
 const postExcluirComentario = async (req, res) => {
     try {
         const { id } = req.params;
-        await Cardapio.excluirComentario(id);
+        await Comentario.excluirComentario(id);
         res.redirect('/admin/comentarios');
     } catch (error) {
         console.error("Erro ao excluir comentário:", error);
